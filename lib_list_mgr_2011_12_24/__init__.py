@@ -20,6 +20,15 @@ assert str is not bytes
 
 import argparse
 
+def write_result(result, out=None):
+    if out is not None:
+        with open(out, mode='w', encoding='utf-8', newline='\n') as fd:
+            for item in result:
+                fd.write('{}\n'.format(item))
+    else:
+        for item in result:
+            print(item)
+
 def main():
     parser = argparse.ArgumentParser(
         description='Utility for manipulation with lists (text file format)')
@@ -55,9 +64,10 @@ def main():
     
     args = parser.parse_args()
     
-    if args.out is not None:
-        out = open(args.out, mode='w', encoding='utf-8', newline='\n')
-    else:
-        out = None
+    result = []
+    
+    # TODO: ...
+    
+    write_result(result, out=args.out)
     
     print(args) # TEST
