@@ -20,6 +20,26 @@ assert str is not bytes
 
 import argparse
 
+def read_list(path):
+    l = []
+    
+    with open(path, encoding='utf-8', newline='\n') as fd:
+        for item in filter(None, map(lambda s: s.strip(), fd)):
+            if item not in l:
+                l.append(item)
+    
+    return l
+
+def cat(result, l):
+    for item in l:
+        if item not in result:
+            result.append(item)
+
+def sub(result, l):
+    for item in l:
+        if item in result:
+            result.remove(item)
+
 def write_result(result, out=None):
     if out is not None:
         with open(out, mode='w', encoding='utf-8', newline='\n') as fd:
@@ -66,8 +86,15 @@ def main():
     
     result = []
     
-    # TODO: ...
+    for path in args.cat:
+        l = read_list(path)
+        cat(result, l)
+    
+    if args.sub is not None:
+        for path in args.sub:
+            l = read_list(path)
+            sub(result, l)
+    
+    # TODO: sort, random
     
     write_result(result, out=args.out)
-    
-    print(args) # TEST
