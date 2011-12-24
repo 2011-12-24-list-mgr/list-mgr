@@ -1,7 +1,7 @@
 list-mgr
 ==================
 
-`list-mgr` is utility for manipulation with lists (text file format)
+`list-mgr` is micro-utility for manipulation with lists (text file format)
 
 Implemented operations:
 

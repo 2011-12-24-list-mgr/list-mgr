@@ -20,6 +20,20 @@ assert str is not bytes
 
 import argparse
 
+class UserError(Exception):
+    pass
+
+class ConflictDetector:
+    def __init__(self, error_msg):
+        self._error_msg = error_msg
+        self._is_conflict = False
+    
+    def __call__(self):
+        if self._is_conflict:
+            raise UserError(self._error_msg)
+        else:
+            self._is_conflict = True
+
 def read_list(path):
     l = []
     
@@ -84,6 +98,7 @@ def main():
     
     args = parser.parse_args()
     
+    order_confl_det = ConflictDetector('Order conflict')
     result = []
     
     for path in args.cat:
@@ -95,6 +110,15 @@ def main():
             l = read_list(path)
             sub(result, l)
     
-    # TODO: sort, random
+    if args.use_sort:
+        order_confl_det()
+        result.sort()
+    
+    if args.use_random:
+        order_confl_det()
+        
+        from random import shuffle
+        
+        shuffle(result)
     
     write_result(result, out=args.out)
