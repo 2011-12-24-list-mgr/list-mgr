@@ -1,5 +1,3 @@
 __pycache__
 *.pyc
 *.pyo
-/site-packages
-/test-site
