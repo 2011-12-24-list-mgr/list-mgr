@@ -18,19 +18,7 @@
 
 assert str is not bytes
 
-REQUIRED_PACKAGES = (
-    # yet nothing
-)
-
-import sys, os.path
-for pkg in REQUIRED_PACKAGES:
-    sys.path.append(os.path.abspath(os.path.join(
-            os.path.dirname(__file__), 'site-packages', pkg)))
-
 from lib_list_mgr_2011_12_24.main import main
 
 if __name__ == '__main__':
     error = main()
-    
-    if error is not None:
-        exit(code=error)

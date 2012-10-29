@@ -64,40 +64,43 @@ def write_result(result, out=None):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Utility for manipulation with lists (text file format)')
+        description='utility for manipulation with lists (text file format)')
     
     parser.add_argument(
         'cat',
+        metavar='CAT-PATH',
         nargs='*',
-        help='List (file path) for concatenation',
+        help='list (file path) for concatenation',
     )
     
     parser.add_argument(
         '--sub',
+        metavar='SUB-PATH',
         action='append',
-        help='List (file path) for substraction',
+        help='list (file path) for substraction',
     )
     
     parser.add_argument(
         '--use-sort',
         action='store_true',
-        help='Using sorting for result',
+        help='using sorting for result',
     )
     
     parser.add_argument(
         '--use-random',
         action='store_true',
-        help='Using randomization for result',
+        help='using randomization for result',
     )
     
     parser.add_argument(
         '--out',
-        help='File path for writing result list',
+        metavar='OUT-PATH',
+        help='file path for writing result list',
     )
     
     args = parser.parse_args()
     
-    order_confl_det = ConflictDetector('Order conflict')
+    order_confl_det = ConflictDetector('order conflict')
     result = []
     
     for path in args.cat:

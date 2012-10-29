@@ -1,5 +1,5 @@
 list-mgr
-==================
+========
 
 `list-mgr` is micro-utility for manipulation with lists (text file format)
 
@@ -14,4 +14,4 @@ Implemented operations:
 Status
 ------
 
-the current status of the project (this branch) -- is `Development`
+The current status of the project (this branch) -- is `Development`
