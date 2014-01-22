@@ -36,7 +36,7 @@ class ConflictDetector:
 def read_list(path):
     l = []
     
-    with open(path, encoding='utf-8', newline='\n') as fd:
+    with open(path, encoding='utf-8', errors='replace') as fd:
         for item in filter(None, map(lambda s: s.strip(), fd)):
             if item not in l:
                 l.append(item)
