@@ -14,4 +14,4 @@ Implemented operations:
 Status
 ------
 
-The current status of the project (this branch) -- is `Development`
+The current status of the project (this branch) -- is `Beta`
