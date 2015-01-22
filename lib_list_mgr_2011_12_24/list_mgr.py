@@ -23,6 +23,7 @@
 assert str is not bytes
 
 import argparse
+import re
 
 class UserError(Exception):
     pass
@@ -38,11 +39,34 @@ class ConflictDetector:
         else:
             self._is_conflict = True
 
-def read_list(path):
+def run_filter_func_list(filter_func_list, item):
+    assert isinstance(item, str) and item
+    
+    for filter_func in filter_func_list:
+        item = filter_func(re=re, item=item)
+        
+        if not item:
+            break
+        
+        if not isinstance(item, str):
+            item = str(item)
+        item = item.strip()
+        
+        if not item:
+            break
+    
+    return item
+
+def read_list(path, filter_func_list):
     l = []
     
     with open(path, encoding='utf-8', errors='replace') as fd:
         for item in filter(None, map(lambda s: s.strip(), fd)):
+            item = run_filter_func_list(filter_func_list, item)
+            
+            if not item:
+                continue
+            
             if item not in l:
                 l.append(item)
     
@@ -58,13 +82,22 @@ def sub(result, l):
         if item in result:
             result.remove(item)
 
-def write_result(result, out=None):
+def write_result(result, out, filter_func_list):
+    def filtered_result():
+        for item in result:
+            item = run_filter_func_list(filter_func_list, item)
+            
+            if not item:
+                continue
+            
+            yield item
+    
     if out is not None:
         with open(out, mode='w', encoding='utf-8', newline='\n') as fd:
-            for item in result:
+            for item in filtered_result():
                 fd.write('{}\n'.format(item))
     else:
-        for item in result:
+        for item in filtered_result():
             print(item)
 
 def main():
@@ -83,6 +116,32 @@ def main():
         metavar='SUB-PATH',
         action='append',
         help='list (file path) for substraction',
+    )
+    
+    parser.add_argument(
+        '--cat-filter-py-expr',
+        metavar='PYTHON-EXPR',
+        action='append',
+        help='using filter (expression string in Python Language) after concatenation input. '
+                'example: "item if item.isupper() else None". '
+                'yet example: "item if re.match(r\'^foo\', item) else None"',
+    )
+    
+    parser.add_argument(
+        '--sub-filter-py-expr',
+        metavar='PYTHON-EXPR',
+        action='append',
+        help='using filter (expression string in Python Language) after substraction input. '
+                'see examples for argument --cat-filter-py-expr',
+    )
+    
+    parser.add_argument(
+        '--out-filter-py-expr',
+        metavar='PYTHON-EXPR',
+        action='append',
+        help='using filter (expression string in Python Language) before output. '
+                'example: "item.upper()". '
+                'see other examples for argument --cat-filter-py-expr',
     )
     
     parser.add_argument(
@@ -108,13 +167,37 @@ def main():
     order_confl_det = ConflictDetector('order conflict')
     result = []
     
+    cat_filter_func_list = []
+    if args.cat_filter_py_expr is not None:
+        for py_expr in args.cat_filter_py_expr:
+            filter_code = compile(py_expr, '<cat_filter_py_expr>', 'eval')
+            def filter_func(_filter_code=filter_code, **kwargs):
+                return eval(_filter_code, kwargs)
+            cat_filter_func_list.append(filter_func)
+    
+    sub_filter_func_list = []
+    if args.sub_filter_py_expr is not None:
+        for py_expr in args.sub_filter_py_expr:
+            filter_code = compile(py_expr, '<sub_filter_py_expr>', 'eval')
+            def filter_func(_filter_code=filter_code, **kwargs):
+                return eval(_filter_code, kwargs)
+            sub_filter_func_list.append(filter_func)
+    
+    out_filter_func_list = []
+    if args.out_filter_py_expr is not None:
+        for py_expr in args.out_filter_py_expr:
+            filter_code = compile(py_expr, '<out_filter_py_expr>', 'eval')
+            def filter_func(_filter_code=filter_code, **kwargs):
+                return eval(_filter_code, kwargs)
+            out_filter_func_list.append(filter_func)
+    
     for path in args.cat:
-        l = read_list(path)
+        l = read_list(path, cat_filter_func_list)
         cat(result, l)
     
     if args.sub is not None:
         for path in args.sub:
-            l = read_list(path)
+            l = read_list(path, sub_filter_func_list)
             sub(result, l)
     
     if args.use_sort:
@@ -128,4 +211,4 @@ def main():
         
         shuffle(result)
     
-    write_result(result, out=args.out)
+    write_result(result, args.out, out_filter_func_list)

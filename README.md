@@ -10,6 +10,7 @@ Implemented operations:
 *   Substraction
 *   Sorting
 *   Randomization
+*   Filtering
 
 Status
 ------
