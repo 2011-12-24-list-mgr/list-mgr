@@ -105,62 +105,62 @@ def main():
         description='utility for manipulation with lists (text file format)')
     
     parser.add_argument(
-        'cat',
-        metavar='CAT-PATH',
-        nargs='*',
-        help='list (file path) for concatenation',
-    )
+            'cat',
+            metavar='CAT-PATH',
+            nargs='*',
+            help='list (file path) for concatenation',
+            )
     
     parser.add_argument(
-        '--sub',
-        metavar='SUB-PATH',
-        action='append',
-        help='list (file path) for substraction',
-    )
+            '--sub',
+            metavar='SUB-PATH',
+            action='append',
+            help='list (file path) for substraction',
+            )
     
     parser.add_argument(
-        '--cat-filter-py-expr',
-        metavar='PYTHON-EXPR',
-        action='append',
-        help='using filter (expression string in Python Language) after concatenation input. '
-                'example: "item if item.isupper() else None". '
-                'yet example: "item if re.match(r\'^foo\', item) else None"',
-    )
+            '--cat-filter-py-expr',
+            metavar='PYTHON-EXPR',
+            action='append',
+            help='using filter (expression string in Python Language) after concatenation input. '
+                    'example: "item if item.isupper() else None". '
+                    'yet example: "item if re.match(r\'^foo\', item) else None"',
+            )
     
     parser.add_argument(
-        '--sub-filter-py-expr',
-        metavar='PYTHON-EXPR',
-        action='append',
-        help='using filter (expression string in Python Language) after substraction input. '
-                'see examples for argument --cat-filter-py-expr',
-    )
+            '--sub-filter-py-expr',
+            metavar='PYTHON-EXPR',
+            action='append',
+            help='using filter (expression string in Python Language) after substraction input. '
+                    'see examples for argument --cat-filter-py-expr',
+            )
     
     parser.add_argument(
-        '--out-filter-py-expr',
-        metavar='PYTHON-EXPR',
-        action='append',
-        help='using filter (expression string in Python Language) before output. '
-                'example: "item.upper()". '
-                'see other examples for argument --cat-filter-py-expr',
-    )
+            '--out-filter-py-expr',
+            metavar='PYTHON-EXPR',
+            action='append',
+            help='using filter (expression string in Python Language) before output. '
+                    'example: "item.upper()". '
+                    'see other examples for argument --cat-filter-py-expr',
+            )
     
     parser.add_argument(
-        '--use-sort',
-        action='store_true',
-        help='using sorting for result',
-    )
+            '--use-sort',
+            action='store_true',
+            help='using sorting for result',
+            )
     
     parser.add_argument(
-        '--use-random',
-        action='store_true',
-        help='using randomization for result',
-    )
+            '--use-random',
+            action='store_true',
+            help='using randomization for result',
+            )
     
     parser.add_argument(
-        '--out',
-        metavar='OUT-PATH',
-        help='file path for writing result list',
-    )
+            '--out',
+            metavar='OUT-PATH',
+            help='file path for writing result list',
+            )
     
     args = parser.parse_args()
     
