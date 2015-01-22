@@ -15,4 +15,4 @@ Implemented operations:
 Status
 ------
 
-Developer version (git master branch).
+Release: list-mgr-0.3.1 .
